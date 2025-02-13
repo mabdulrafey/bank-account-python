@@ -30,26 +30,43 @@ class BankAccount:
         print(f"Current Balance: ${self.current_balance}")
         print(f"Minimum Balance: ${self.minimum_balance}")
 
+# Subclass: Savings Account with Interest
+class SavingsAccount(BankAccount):
+    def __init__(self, customer_name, current_balance, minimum_balance, interest_rate):
+        super().__init__(customer_name, current_balance, minimum_balance)
+        self.interest_rate = interest_rate
+    
+    def apply_interest(self):
+        interest = self.current_balance * (self.interest_rate / 100)
+        self.current_balance += interest
+        print(f"Interest of ${interest:.2f} applied at {self.interest_rate}% rate.")
 
-# 2 instances
-account1 = BankAccount("Abdul", 500, 100)
-account2 = BankAccount("Rafey", 1000, 200)
+# Subclass: Checking Account with Transfer Limitation
+class CheckingAccount(BankAccount):
+    def __init__(self, customer_name, current_balance, minimum_balance, transfer_limit):
+        super().__init__(customer_name, current_balance, minimum_balance)
+        self.transfer_limit = transfer_limit
+    
+    def transfer(self, recipient, amount):
+        if amount > self.transfer_limit:
+            print("Transfer denied! Amount exceeds transfer limit.")
+        elif self.current_balance - amount >= self.minimum_balance:
+            self.current_balance -= amount
+            recipient.current_balance += amount
+            print(f"${amount} transferred successfully to {recipient.customer_name}.")
+        else:
+            print("Transfer denied! Insufficient balance.")
 
-# Display information
-account1.print_customer_information()
-print("\n")
-account1.deposit(200)
-account1.withdraw(500)
-print("\n")
-account1.print_customer_information()
-
+# Testing the new subclasses
+savings = SavingsAccount("Abdul", 2000, 100, 5)
+savings.print_customer_information()
+savings.apply_interest()
+savings.print_customer_information()
 
 print("\n-----------------------------\n")
-print("\n-----------------------------\n")
 
-account2.print_customer_information()
-print("\n")
-account2.deposit(300)
-account2.withdraw(900)
-print("\n")
-account2.print_customer_information()
+checking = CheckingAccount("Rafey", 1500, 200, 500)
+checking.print_customer_information()
+checking.transfer(savings, 400)
+checking.print_customer_information()
+savings.print_customer_information()
