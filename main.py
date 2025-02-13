@@ -2,10 +2,12 @@ class BankAccount:
     # Class attribute
     bank_title = "Muhammad's Python Bank"
 
-    def __init__(self, customer_name, current_balance, minimum_balance):
+    def __init__(self, customer_name, current_balance, minimum_balance, account_number, routing_number):
         self.customer_name = customer_name
         self.current_balance = current_balance
         self.minimum_balance = minimum_balance
+        self._account_number = account_number  # Protected member
+        self.__routing_number = routing_number  # Private member
 
     def deposit(self, amount):
         if amount > 0:
@@ -29,11 +31,12 @@ class BankAccount:
         print(f"Customer Name: {self.customer_name}")
         print(f"Current Balance: ${self.current_balance}")
         print(f"Minimum Balance: ${self.minimum_balance}")
+        print(f"Account Number: {self._account_number}")
 
 # Subclass: Savings Account with Interest
 class SavingsAccount(BankAccount):
-    def __init__(self, customer_name, current_balance, minimum_balance, interest_rate):
-        super().__init__(customer_name, current_balance, minimum_balance)
+    def __init__(self, customer_name, current_balance, minimum_balance, interest_rate, account_number, routing_number):
+        super().__init__(customer_name, current_balance, minimum_balance, account_number, routing_number)
         self.interest_rate = interest_rate
     
     def apply_interest(self):
@@ -43,8 +46,8 @@ class SavingsAccount(BankAccount):
 
 # Subclass: Checking Account with Transfer Limitation
 class CheckingAccount(BankAccount):
-    def __init__(self, customer_name, current_balance, minimum_balance, transfer_limit):
-        super().__init__(customer_name, current_balance, minimum_balance)
+    def __init__(self, customer_name, current_balance, minimum_balance, transfer_limit, account_number, routing_number):
+        super().__init__(customer_name, current_balance, minimum_balance, account_number, routing_number)
         self.transfer_limit = transfer_limit
     
     def transfer(self, recipient, amount):
@@ -58,14 +61,14 @@ class CheckingAccount(BankAccount):
             print("Transfer denied! Insufficient balance.")
 
 # Testing the new subclasses
-savings = SavingsAccount("Abdul", 2000, 100, 5)
+savings = SavingsAccount("Abdul", 2000, 100, 5, "123456789", "987654321")
 savings.print_customer_information()
 savings.apply_interest()
 savings.print_customer_information()
 
 print("\n-----------------------------\n")
 
-checking = CheckingAccount("Rafey", 1500, 200, 500)
+checking = CheckingAccount("Rafey", 1500, 200, 500, "987654321", "123456789")
 checking.print_customer_information()
 checking.transfer(savings, 400)
 checking.print_customer_information()
